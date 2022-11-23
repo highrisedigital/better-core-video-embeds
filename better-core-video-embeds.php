@@ -39,7 +39,7 @@ function hd_bcve_enqueue_scripts() {
 
 		// enqueue the front end script to invoking the video embed on image click.
 		wp_enqueue_script(
-			'hd_youtube_embed',
+			'better-core-video-embeds-js',
 			HD_BCVE_LOCATION_URL . '/assets/js/better-core-video-embeds.js',
 			false,
 			false,
@@ -58,7 +58,7 @@ function hd_bcve_register_block_style() {
 
 	// register the style for this block.
 	wp_register_style(
-		'better-core-video-embeds',
+		'better-core-video-embeds-styles',
 		HD_BCVE_LOCATION_URL . '/assets/css/better-core-video-embeds.css'
 	);
 
@@ -195,9 +195,9 @@ function hd_bcve_render_core_embed_block( $block_content, $block, $instance ) {
 	?>
 
 	<figure class="<?php echo esc_attr( implode( ' ', apply_filters( 'hd_bcve_wrapper_classes', $figure_classes, $block ) ) ); ?>" data-id="<?php echo esc_attr( $video_id ); ?>">
-		<?php wp_print_styles( 'better-core-video-embeds' ); ?>
+		<?php wp_print_styles( 'better-core-video-embeds' ); // output the "block" styles for the thubmnail. ?>
 		<div class="play-button"></div>
-		<img style="height: auto; width: 100%;" loading="lazy" class="hd-bcve-thumbnail" src="<?php echo esc_url( $thumbnail_url ); ?>" />
+		<img loading="lazy" class="hd-bcve-thumbnail" src="<?php echo esc_url( $thumbnail_url ); ?>" />
 	</figure>
 
 	<template id="hd-bcve-embed-html-<?php echo esc_attr( $video_id ); ?>">
