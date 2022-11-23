@@ -2,6 +2,10 @@
 	position: relative;
 	cursor: pointer;
 }
+.hd-bcve-thumbnail {
+	height: auto;
+	max-width: 100%;
+}
 .hd-bcve-wrapper .play-button {
     --hd-play-button-size: 80px;
     --hd-play-button-background-color: #FFFFFF;
