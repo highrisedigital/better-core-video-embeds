@@ -310,26 +310,32 @@ function hd_bcve_get_vimeo_video_thumbnail_url( $video_id = '' ) {
 }
 
 /**
- * Creates a escaping function to allowed post HTML plus iframes
+ * Creates a escaping function to allowed certain HTML for embed content.
  * Needed for when echoing the innerblock HTML.
  *
- * @param array $post_allowed_html An array of HTML elements allowed.
+ * @param array An array of HTML elements allowed.
  */
 function hd_job_allowed_innerblock_html() {
 
-	// get the normal post, allowed html.
-	$post_allowed_html = wp_kses_allowed_html( 'post' );
-	
-	// add iframes to the allowed html.
-	$post_allowed_html['iframe'] = [
-		'src'             => true,
-		'height'          => true,
-		'width'           => true,
-		'frameborder'     => true,
-		'allowfullscreen' => true,
+	/**
+	 * Return the allowed html
+	 * These are the elements in the rendered embed block for youtube and vimeo videos.
+	 * Therefore we need to allow these to keep the same structure.
+	 */
+	return [
+		'iframe' => [
+			'src'             => true,
+			'height'          => true,
+			'width'           => true,
+			'frameborder'     => true,
+			'allowfullscreen' => true,
+		],
+		'figure' => [
+			'class' => true,
+		],
+		'div'    => [
+			'class' => true,
+		]
 	];
-
-	// return the allowed html.
-	return $post_allowed_html;
 
 }
