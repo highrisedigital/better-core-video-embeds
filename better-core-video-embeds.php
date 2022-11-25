@@ -40,7 +40,7 @@ function hd_bcve_enqueue_scripts() {
 		// enqueue the front end script to invoking the video embed on image click.
 		wp_enqueue_script(
 			'better-core-video-embeds-js',
-			HD_BCVE_LOCATION_URL . '/assets/js/better-core-video-embeds.js',
+			HD_BCVE_LOCATION_URL . '/assets/js/better-core-video-embeds.min.js',
 			false,
 			false,
 			true
@@ -59,7 +59,7 @@ function hd_bcve_register_block_style() {
 	// register the style for this block.
 	wp_register_style(
 		'better-core-video-embeds-styles',
-		HD_BCVE_LOCATION_URL . '/assets/css/better-core-video-embeds.css'
+		HD_BCVE_LOCATION_URL . '/assets/css/better-core-video-embeds.min.css'
 	);
 
 }
@@ -201,7 +201,7 @@ function hd_bcve_render_core_embed_block( $block_content, $block, $instance ) {
 	</figure>
 
 	<template id="hd-bcve-embed-html-<?php echo esc_attr( $video_id ); ?>">
-		<?php echo $block['innerHTML']; ?>
+		<?php echo wp_kses_post( $block['innerHTML'] ); ?>
 	</template>
 
 	<?php
