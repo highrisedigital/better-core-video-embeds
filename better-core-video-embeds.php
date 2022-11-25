@@ -192,6 +192,8 @@ function hd_bcve_render_core_embed_block( $block_content, $block, $instance ) {
 	// buffer the output as we need to return not echo.
 	ob_start();
 
+	//wp_var_dump( hd_job_allowed_innerblock_html() );
+
 	?>
 
 	<figure class="<?php echo esc_attr( implode( ' ', apply_filters( 'hd_bcve_wrapper_classes', $figure_classes, $block ) ) ); ?>" data-id="<?php echo esc_attr( $video_id ); ?>">
@@ -201,7 +203,7 @@ function hd_bcve_render_core_embed_block( $block_content, $block, $instance ) {
 	</figure>
 
 	<template id="hd-bcve-embed-html-<?php echo esc_attr( $video_id ); ?>">
-		<?php echo wp_kses_post( $block['innerHTML'] ); ?>
+		<?php echo wp_kses( $block['innerHTML'], hd_job_allowed_innerblock_html() ); ?>
 	</template>
 
 	<?php
@@ -304,5 +306,30 @@ function hd_bcve_get_vimeo_video_thumbnail_url( $video_id = '' ) {
 	
 	// return the url.
 	return apply_filters( 'hd_bcve_vimeo_video_thumbnail_url', $image_url, $video_id );
+
+}
+
+/**
+ * Creates a escaping function to allowed post HTML plus iframes
+ * Needed for when echoing the innerblock HTML.
+ *
+ * @param array $post_allowed_html An array of HTML elements allowed.
+ */
+function hd_job_allowed_innerblock_html() {
+
+	// get the normal post, allowed html.
+	$post_allowed_html = wp_kses_allowed_html( 'post' );
+	
+	// add iframes to the allowed html.
+	$post_allowed_html['iframe'] = [
+		'src'             => true,
+		'height'          => true,
+		'width'           => true,
+		'frameborder'     => true,
+		'allowfullscreen' => true,
+	];
+
+	// return the allowed html.
+	return $post_allowed_html;
 
 }
