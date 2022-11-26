@@ -151,6 +151,23 @@ function hd_bcve_render_core_embed_block( $block_content, $block, $instance ) {
 
 			// break out the switch.
 			break;
+		
+		// for vimeo urls.
+		case 'www.dailymotion.com';
+
+			// if we have a path.
+			if ( empty( $parsed_video_url['path'] ) ) {
+				return $block_content;
+			}
+
+			// remove the preceeding slash.
+			$video_id = str_replace( '/video/', '', $parsed_video_url['path'] );
+
+			// get the vimeo thumbnail url for this video.
+			$thumbnail_url = hd_bcve_get_dailymotion_video_thumbnail_url( $video_id );
+			
+			// break out the switch.
+			break;
 
 	}
 
@@ -298,6 +315,55 @@ function hd_bcve_get_vimeo_video_thumbnail_url( $video_id = '' ) {
 
 		// get the image url from the json.
 		$image_url = $video_details[0]->thumbnail_large;
+
+		// set the transient, storing the image url.
+		set_transient( 'hd_bcve_' . $video_id, $image_url, DAY_IN_SECONDS );
+
+	}
+	
+	// return the url.
+	return apply_filters( 'hd_bcve_vimeo_video_thumbnail_url', $image_url, $video_id );
+
+}
+
+/**
+ * Return the dailymotion video thumbnail url.
+ *
+ * @param string  $video_id The ID of the video.
+ * @return string $url      The URL of the thumbnail or an empty string if no URL found.
+ */
+function hd_bcve_get_dailymotion_video_thumbnail_url( $video_id = '' ) {
+
+	// if we have no video id.
+	if ( '' === $video_id ) {
+		return '';
+	}
+
+	// get the URL from the transient.
+	$image_url = get_transient( 'hd_bcve_' . $video_id );
+
+	// if we don't have a transient.
+	if ( false === $image_url ) {
+
+		// get the video details from the api.
+		$video_details = wp_remote_get(
+			'https://api.dailymotion.com/video/' . $video_id . '?fields=thumbnail_url'
+		);
+
+		// if the request to the hi res image errors or returns anything other than a http 200 response code.
+		if ( ( is_wp_error( $video_details )) && ( 200 !== wp_remote_retrieve_response_code( $video_details ) ) ) {
+			return '';
+		}
+
+		// grab the body of the response.
+		$video_details = json_decode(
+			wp_remote_retrieve_body(
+				$video_details
+			)
+		);
+
+		// get the image url from the json.
+		$image_url = $video_details->thumbnail_url;
 
 		// set the transient, storing the image url.
 		set_transient( 'hd_bcve_' . $video_id, $image_url, DAY_IN_SECONDS );
