@@ -44,7 +44,7 @@ The plugin provides progressive enhancement, therefore if you no longer use this
 == Changelog ==
 
 = 1.0 (23/11/2022) =
-* Initial plugin launch
+* Initial plugin launch added to the WP.org repository.
 
 == Upgrade Notice ==
 
