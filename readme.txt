@@ -19,6 +19,8 @@ Without this plugin, when using the core embed block, when your page loads, lots
 
 This plugin prevents these scripts and styles from loading until the user actually interacts with the video. It does this by replacing the video embed, on page load with the video thumbnail image (added on Youtube or Vimeo). When a user clicks the thumbnail the embedded video, along with associated scripts and styles in then loaded.
 
+https://www.youtube.com/watch?v=k7A2kZWUb9Q
+
 == Installation ==
 
 1. Log into WordPress
