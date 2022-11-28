@@ -64,7 +64,7 @@ function hd_bcve_register_block_style() {
 
 }
 
-add_action( 'wp_head', 'hd_bcve_register_block_style' );
+add_action( 'wp', 'hd_bcve_register_block_style' );
 
 /**
  * Filters the code embed block output for improved performance on Youtube videos.
