@@ -40,7 +40,7 @@ function hd_bcve_enqueue_scripts() {
 		// enqueue the front end script to invoking the video embed on image click.
 		wp_enqueue_script(
 			'better-core-video-embeds-js',
-			HD_BCVE_LOCATION_URL . '/assets/js/better-core-video-embeds.min.js',
+			HD_BCVE_LOCATION_URL . '/assets/js/better-core-video-embeds.js',
 			false,
 			false,
 			true
@@ -191,8 +191,6 @@ function hd_bcve_render_core_embed_block( $block_content, $block, $instance ) {
 
 	// buffer the output as we need to return not echo.
 	ob_start();
-
-	//wp_var_dump( hd_job_allowed_innerblock_html() );
 
 	?>
 
