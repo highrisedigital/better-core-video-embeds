@@ -4,12 +4,12 @@ Donate link: https://example.com/
 Tags: embed, oembed, youtube, vimeo
 Requires at least: 6.0
 Tested up to: 6.1.1
-Stable tag: 1.0
+Stable tag: 1.1
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-A plugin which enhances the core embed block for Youtube and Vimeo videos by not loading unnecessary scripts until they are needed.
+A plugin which enhances the core embed block for Youtube, Daily Motion and Vimeo videos by not loading unnecessary scripts until they are needed.
 
 == Description ==
 
@@ -44,6 +44,14 @@ The plugin provides progressive enhancement, therefore if you no longer use this
 1. Example of an embedded Youtube video in a post when using Better Core Embeds
 
 == Changelog ==
+
+= 1.1 (29/11/2022) =
+* Updated a bug where the CSS was not loading for some users.
+* Added support for Daily Motion videos
+* Enqueued the stylesheet using the standard `wp_enqueue_style` function rather than using print styles
+* Improved the way the thumbnail markup is output, making this more extensible and easier for developers to modify
+* Added support for the embed caption to show beneath the thumbnail image
+* Adds the embed provider slug as a class on the thumbnail wrapper
 
 = 1.0 (23/11/2022) =
 * Initial plugin launch added to the WP.org repository.
