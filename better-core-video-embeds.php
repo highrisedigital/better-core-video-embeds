@@ -56,15 +56,20 @@ add_action( 'wp_enqueue_scripts', 'hd_bcve_enqueue_scripts' );
  */
 function hd_bcve_register_block_style() {
 
-	// register the style for this block.
-	wp_register_style(
-		'better-core-video-embeds-styles',
-		HD_BCVE_LOCATION_URL . '/assets/css/better-core-video-embeds.min.css'
-	);
+	// only if the page has a core embed block present.
+	if ( has_block( 'core/embed' ) ) {
+
+		// register the style for this block.
+		wp_enqueue_style(
+			'better-core-video-embeds-styles',
+			HD_BCVE_LOCATION_URL . '/assets/css/better-core-video-embeds.min.css'
+		);
+
+	}
 
 }
 
-add_action( 'wp', 'hd_bcve_register_block_style' );
+add_action( 'wp_enqueue_scripts', 'hd_bcve_register_block_style' );
 
 /**
  * Filters the code embed block output for improved performance on Youtube videos.
@@ -164,8 +169,8 @@ function hd_bcve_render_core_embed_block( $block_content, $block, $instance ) {
 		return $block_content;
 	}
 
-	// create an array of classes to add to the placeholder image figure.
-	$figure_classes = [
+	// create an array of classes to add to the placeholder image wrapper.
+	$wrapper_classes = [
 		'wp-block-image',
 		'hd-bcve-wrapper',
 		'is--' . $block['attrs']['providerNameSlug'],
@@ -178,7 +183,7 @@ function hd_bcve_render_core_embed_block( $block_content, $block, $instance ) {
 		$class_names = explode( ' ', $block['attrs']['className'] );
 
 		// merge the class names into the figures classes array.
-		$figure_classes = array_merge( $figure_classes, $class_names );
+		$wrapper_classes = array_merge( $wrapper_classes, $class_names );
 
 	}
 
@@ -186,9 +191,12 @@ function hd_bcve_render_core_embed_block( $block_content, $block, $instance ) {
 	if ( ! empty( $block['attrs']['align'] ) ) {
 
 		// add the alignment class to the figure classes.
-		$figure_classes[] = 'align' . $block['attrs']['align'];
+		$wrapper_classes[] = 'align' . $block['attrs']['align'];
 
 	}
+
+	// allow the classes to be filtered.
+	$wrapper_classes = apply_filters( '', $wrapper_classes, $block, $video_id, $thumbnail_url );
 
 	// buffer the output as we need to return not echo.
 	ob_start();
@@ -196,19 +204,16 @@ function hd_bcve_render_core_embed_block( $block_content, $block, $instance ) {
 	// output the registered "block" styles for the thubmnail.
 	wp_print_styles( 'better-core-video-embeds-styles' );
 
-	?>
-
-	<figure class="<?php echo esc_attr( implode( ' ', apply_filters( 'hd_bcve_wrapper_classes', $figure_classes, $block ) ) ); ?>" data-id="<?php echo esc_attr( $video_id ); ?>">
-		<div class="play-button"></div>
-		<img loading="lazy" class="hd-bcve-thumbnail" src="<?php echo esc_url( $thumbnail_url ); ?>" />
-		<?php do_action( 'hd_bcve_after_video_thumbnail', $block, $video_id ); ?>
-	</figure>
-
-	<template id="hd-bcve-embed-html-<?php echo esc_attr( $video_id ); ?>">
-		<?php echo wp_kses( $block['innerHTML'], hd_job_allowed_innerblock_html() ); ?>
-	</template>
-
-	<?php
+	/**
+	 * Fires and action to which the new block markup is added too.
+	 *
+	 * @hooked hd_bvce_open_markup_figure_element - 10
+	 * @hooked hd_bcve_add_video_play_button - 20
+	 * @hooked hd_bcve_add_video_thumbnail_markup - 30
+	 * @hooked hd_bvce_close_markup_figure_element - 40
+	 * @hooked hd_bcve_add_original_embed_template - 50
+	 */
+	do_action( 'hd_bcve_video_thumbnail_markup', $block, $video_id, $thumbnail_url, $wrapper_classes );
 
 	// return the new block markup.
 	return ob_get_clean();
@@ -341,3 +346,96 @@ function hd_job_allowed_innerblock_html() {
 	];
 
 }
+
+/**
+ * Adds the opening figure element to the thumbnail markup.
+ *
+ * @param array  $block           The block array.
+ * @param string $video_id        The ID of the embedded video.
+ * @param string $thumbnail_url   The URL of the video thumbnail.
+ * @param array  $wrapper_classes An array of CSS classes to add to the wrapper.
+ */
+function hd_bvce_open_markup_figure_element( $block, $video_id, $thumbnail_url, $wrapper_classes ) {
+
+	?>
+	<figure class="<?php echo esc_attr( implode( ' ', $wrapper_classes ) ); ?>" data-id="<?php echo esc_attr( $video_id ); ?>">
+	<?php
+
+}
+
+add_action( 'hd_bcve_video_thumbnail_markup', 'hd_bvce_open_markup_figure_element', 10, 4 );
+
+/**
+ * Adds the play button div to the markup.
+ *
+ * @param array  $block           The block array.
+ * @param string $video_id        The ID of the embedded video.
+ * @param string $thumbnail_url   The URL of the video thumbnail.
+ * @param array  $wrapper_classes An array of CSS classes to add to the wrapper.
+ */
+function hd_bcve_add_video_play_button( $block, $video_id, $thumbnail_url, $wrapper_classes ) {
+
+	?>
+	<div class="play-button"></div>
+	<?php
+
+}
+
+add_action( 'hd_bcve_video_thumbnail_markup', 'hd_bcve_add_video_play_button', 20, 4 );
+
+/**
+ * Adds the video thumbnail markup output.
+ *
+ * @param array  $block           The block array.
+ * @param string $video_id        The ID of the embedded video.
+ * @param string $thumbnail_url   The URL of the video thumbnail.
+ * @param array  $wrapper_classes An array of CSS classes to add to the wrapper.
+ */
+function hd_bcve_add_video_thumbnail_markup( $block, $video_id, $thumbnail_url, $wrapper_classes ) {
+
+	?>
+	<img loading="lazy" class="hd-bcve-thumbnail" src="<?php echo esc_url( $thumbnail_url ); ?>" />
+	<?php
+
+}
+
+add_action( 'hd_bcve_video_thumbnail_markup', 'hd_bcve_add_video_thumbnail_markup', 30, 4 );
+
+/**
+ * Adds the closing figure element to the thumbnail markup.
+ *
+ * @param array  $block           The block array.
+ * @param string $video_id        The ID of the embedded video.
+ * @param string $thumbnail_url   The URL of the video thumbnail.
+ * @param array  $wrapper_classes An array of CSS classes to add to the wrapper.
+ */
+function hd_bcve_close_markup_figure_element( $block, $video_id, $thumbnail_url, $wrapper_classes ) {
+
+	?>
+	</figure>
+	<?php
+
+}
+
+add_action( 'hd_bcve_video_thumbnail_markup', 'hd_bcve_close_markup_figure_element', 40, 4 );
+
+/**
+ * Adds the original block markup to the template element.
+ * This is used when the item is cloned when the thumbnail is clicked.
+ *
+ * @param array  $block           The block array.
+ * @param string $video_id        The ID of the embedded video.
+ * @param string $thumbnail_url   The URL of the video thumbnail.
+ * @param array  $wrapper_classes An array of CSS classes to add to the wrapper.
+ */
+function hd_bcve_add_original_embed_template( $block, $video_id, $thumbnail_url, $wrapper_classes ) {
+
+	?>
+	<template id="hd-bcve-embed-html-<?php echo esc_attr( $video_id ); ?>">
+		<?php echo wp_kses( $block['innerHTML'], hd_job_allowed_innerblock_html() ); ?>
+	</template>
+	<?php
+
+}
+
+add_action( 'hd_bcve_video_thumbnail_markup', 'hd_bcve_add_original_embed_template', 50, 4 );
