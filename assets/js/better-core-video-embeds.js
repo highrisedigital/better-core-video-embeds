@@ -7,8 +7,22 @@ document.querySelectorAll( '.hd-bcve-wrapper' ).forEach(( el, i ) => {
 
 	// get the associated template element which holds the embed code.
 	var template = document.querySelector( '#hd-bcve-embed-html-' + videoId );
-	var caption = template.content.textContent;
-	caption = caption.trim();
+
+	/**
+	 * Add autoplay on the iframe as well as loading from youtube no cookie.
+	 * Grabs the iframe from the embed template.
+	 * Adds the autoplay and other attrs to the iframe src URL
+	 * Replaces the standard youtube domain with the no cookie version.
+	 */
+	var iframe = template.content.children[0].querySelector( 'iframe' );
+	var iframeSrc = iframe.getAttribute( 'src' ) + '&rel=0&showinfo=0&autoplay=1';
+	iframeSrc = iframeSrc.replace( 'www.youtube.com', 'www.youtube-nocookie.com' );
+	
+	// set the new iframe src including autoplay true.
+	iframe.setAttribute( 'src', iframeSrc );
+
+	// get the text content of the embed element - this is the caption.
+	var caption = template.content.textContent.trim();
 
 	// if we have a caption.
 	if ( '' !== caption ) {
@@ -28,22 +42,9 @@ document.querySelectorAll( '.hd-bcve-wrapper' ).forEach(( el, i ) => {
 
 		// clone the template element.
 		var contentOuter = template.content.cloneNode( true );
-
+		
 		// grab just the first child of the template - this is the figure block element which wraps the iframe.
 		var content = contentOuter.children[0];
-
-		// find the iframe in the embed content.
-		var iframe = content.querySelector( 'iframe' );
-
-		// add auto play true to the iframe src.
-		// ensures the video plays when the thumbnail is clicked.
-		var iframeSrc = iframe.getAttribute( 'src' ) + '&rel=0&showinfo=0&autoplay=1';
-		iframeSrc = iframeSrc.replace( 'www.youtube.com', 'www.youtube-nocookie.com' );
-		console.log( iframeSrc );
-		
-		// set the new iframe src including autoplay true.
-		iframe.setAttribute( 'src', iframeSrc );
-		
 
 		// add the iframe embed content before the embed wrapper.
 		el.before( content );
