@@ -193,10 +193,12 @@ function hd_bcve_render_core_embed_block( $block_content, $block, $instance ) {
 	// buffer the output as we need to return not echo.
 	ob_start();
 
+	// output the registered "block" styles for the thubmnail.
+	wp_print_styles( 'better-core-video-embeds-styles' );
+
 	?>
 
 	<figure class="<?php echo esc_attr( implode( ' ', apply_filters( 'hd_bcve_wrapper_classes', $figure_classes, $block ) ) ); ?>" data-id="<?php echo esc_attr( $video_id ); ?>">
-		<?php wp_print_styles( 'better-core-video-embeds-styles' ); // output the "block" styles for the thubmnail. ?>
 		<div class="play-button"></div>
 		<img loading="lazy" class="hd-bcve-thumbnail" src="<?php echo esc_url( $thumbnail_url ); ?>" />
 		<?php do_action( 'hd_bcve_after_video_thumbnail', $block, $video_id ); ?>
