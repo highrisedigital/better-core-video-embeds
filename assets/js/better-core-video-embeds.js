@@ -21,6 +21,9 @@ document.querySelectorAll( '.hd-bcve-wrapper' ).forEach(( el, i ) => {
 	// set the new iframe src including autoplay true.
 	iframe.setAttribute( 'src', iframeSrc );
 
+	// set an allows attribute on the iframe with an autoplay value.
+	iframe.setAttribute( 'allow', 'autoplay' );
+
 	// get the text content of the embed element - this is the caption.
 	var caption = template.content.textContent.trim();
 
