@@ -64,7 +64,7 @@ function hd_bcve_register_block_style() {
 
 }
 
-add_action( 'wp_head', 'hd_bcve_register_block_style' );
+add_action( 'wp', 'hd_bcve_register_block_style' );
 
 /**
  * Filters the code embed block output for improved performance on Youtube videos.
@@ -77,7 +77,7 @@ add_action( 'wp_head', 'hd_bcve_register_block_style' );
  */
 function hd_bcve_render_core_embed_block( $block_content, $block, $instance ) {
 
-	// if the provider slug name is empty or not youtube.
+	// if the provider slug name is empty.
 	if ( empty( $block['attrs']['providerNameSlug'] ) ) {
 		return $block_content;
 	}
@@ -168,6 +168,7 @@ function hd_bcve_render_core_embed_block( $block_content, $block, $instance ) {
 	$figure_classes = [
 		'wp-block-image',
 		'hd-bcve-wrapper',
+		'is--' . $block['attrs']['providerNameSlug'],
 	];
 
 	// if we have classNames on the embed block.
@@ -192,14 +193,13 @@ function hd_bcve_render_core_embed_block( $block_content, $block, $instance ) {
 	// buffer the output as we need to return not echo.
 	ob_start();
 
-	//wp_var_dump( hd_job_allowed_innerblock_html() );
-
 	?>
 
 	<figure class="<?php echo esc_attr( implode( ' ', apply_filters( 'hd_bcve_wrapper_classes', $figure_classes, $block ) ) ); ?>" data-id="<?php echo esc_attr( $video_id ); ?>">
 		<?php wp_print_styles( 'better-core-video-embeds-styles' ); // output the "block" styles for the thubmnail. ?>
 		<div class="play-button"></div>
 		<img loading="lazy" class="hd-bcve-thumbnail" src="<?php echo esc_url( $thumbnail_url ); ?>" />
+		<?php do_action( 'hd_bcve_after_video_thumbnail', $block, $video_id ); ?>
 	</figure>
 
 	<template id="hd-bcve-embed-html-<?php echo esc_attr( $video_id ); ?>">

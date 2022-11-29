@@ -5,6 +5,7 @@
 .hd-bcve-thumbnail {
 	height: auto;
 	max-width: 100%;
+	width: 100%;
 }
 .hd-bcve-wrapper .play-button {
     --hd-play-button-size: 80px;
