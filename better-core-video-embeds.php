@@ -4,7 +4,7 @@ Plugin Name: Better Core Video Embeds
 Description: A plugin which enhances the core video embeds for Youtube and Vimeo videos by not loading unnecessary scripts until they are needed.
 Requires at least: 6.0
 Requires PHP: 7.0
-Version: 1.1
+Version: 1.1.1
 Author: Highrise Digital
 Author URI: https://highrise.digital/
 License: GPL-2.0-or-later
@@ -40,7 +40,7 @@ function hd_bcve_enqueue_scripts() {
 		// enqueue the front end script to invoking the video embed on image click.
 		wp_enqueue_script(
 			'better-core-video-embeds-js',
-			HD_BCVE_LOCATION_URL . '/assets/js/better-core-video-embeds.min.js',
+			HD_BCVE_LOCATION_URL . '/assets/js/better-core-video-embeds.js',
 			false,
 			false,
 			true
@@ -404,6 +404,9 @@ function hd_job_allowed_innerblock_html() {
 			'allowfullscreen' => true,
 		],
 		'figure' => [
+			'class' => true,
+		],
+		'figcaption' => [
 			'class' => true,
 		],
 		'div'    => [
