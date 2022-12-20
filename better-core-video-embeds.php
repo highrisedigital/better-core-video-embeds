@@ -40,7 +40,7 @@ function hd_bcve_enqueue_scripts() {
 		// enqueue the front end script to invoking the video embed on image click.
 		wp_enqueue_script(
 			'better-core-video-embeds-js',
-			HD_BCVE_LOCATION_URL . '/assets/js/better-core-video-embeds.min.js',
+			HD_BCVE_LOCATION_URL . '/assets/js/better-core-video-embeds.js',
 			false,
 			false,
 			true
@@ -404,6 +404,9 @@ function hd_job_allowed_innerblock_html() {
 			'allowfullscreen' => true,
 		],
 		'figure' => [
+			'class' => true,
+		],
+		'figcaption' => [
 			'class' => true,
 		],
 		'div'    => [
