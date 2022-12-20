@@ -4,7 +4,7 @@ Donate link: https://example.com/
 Tags: embed, oembed, youtube, vimeo
 Requires at least: 6.0
 Tested up to: 6.1.1
-Stable tag: 1.1
+Stable tag: 1.1.1
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -44,6 +44,9 @@ The plugin provides progressive enhancement, therefore if you no longer use this
 1. Example of an embedded Youtube video in a post when using Better Core Embeds
 
 == Changelog ==
+
+= 1.1.1 (20/12/2022) =
+* Fixed a bug where the <figcaption> element was removed when the video thumbnail was clicked.
 
 = 1.1 (29/11/2022) =
 * Updated a bug where the CSS was not loading for some users.
