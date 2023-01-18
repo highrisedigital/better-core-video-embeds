@@ -1,10 +1,10 @@
 === Better Core Video Embeds ===
 Contributors: highrisedigital,wpmarkuk
 Donate link: https://example.com/
-Tags: embed, oembed, youtube, vimeo
+Tags: embed, oembed, youtube, vimeo, performance, blocks
 Requires at least: 6.0
 Tested up to: 6.1.1
-Stable tag: 1.1.1
+Stable tag: 1.1.2
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -13,11 +13,11 @@ A plugin which enhances the core embed block for Youtube, Daily Motion and Vimeo
 
 == Description ==
 
-This plugin provides page optimisations for pages and posts which have embedded Youtube or Vimeo videos which have been added using the core embed block.
+This plugin provides page optimisations for pages and posts which have embedded Youtube, Vimeo or Daily Motion videos which have been added using the core embed block.
 
-Without this plugin, when using the core embed block, when your page loads, lots of Youtube and/or Vimeo scripts and styles are loaded, regardless of whether a visitor actually interacts with the embedded video.
+Without this plugin, when using the core embed block, when your page loads, lots of external scripts and styles are loaded from the embed service, regardless of whether a visitor actually interacts with the embedded video.
 
-This plugin prevents these scripts and styles from loading until the user actually interacts with the video. It does this by replacing the video embed, on page load with the video thumbnail image (added on Youtube or Vimeo). When a user clicks the thumbnail the embedded video, along with associated scripts and styles in then loaded.
+This plugin prevents these scripts and styles from loading until the user actually interacts with the video. It does this by replacing the video embed, on page load with the video thumbnail image (added on Youtube, Vimeo or Daily Motion). When a user clicks the thumbnail the embedded video, along with associated scripts and styles are loaded.
 
 https://www.youtube.com/watch?v=k7A2kZWUb9Q
 
@@ -44,6 +44,10 @@ The plugin provides progressive enhancement, therefore if you no longer use this
 1. Example of an embedded Youtube video in a post when using Better Core Embeds
 
 == Changelog ==
+
+= 1.1.2 (18/01/2023) =
+* Allow HTML allowed in a caption to be used with videos. Previously HTML was stripped from the caption.
+* Ensure that any links added to embed captions are clickable.
 
 = 1.1.1 (20/12/2022) =
 * Fixed a bug where the <figcaption> element was removed when the video thumbnail was clicked.
