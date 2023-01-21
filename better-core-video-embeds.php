@@ -381,7 +381,7 @@ function hd_bcve_get_dailymotion_video_thumbnail_url( $video_id = '' ) {
 	}
 	
 	// return the url.
-	return apply_filters( 'hd_bcve_vimeo_video_thumbnail_url', $image_url, $video_id );
+	return apply_filters( 'hd_bcve_dailymotion_video_thumbnail_url', $image_url, $video_id );
 
 }
 

@@ -48,6 +48,7 @@ The plugin provides progressive enhancement, therefore if you no longer use this
 = 1.1.3 (21/01/2023) =
 * Ensure the plugin works on videos embedded from the www or no www version of a domain e.g. www.youtube.com and youtube.com.
 * Output an alt attribute on the video thumbnail image.
+* Correct the name of the Daily Motion thumbnail output filter.
 
 = 1.1.2 (18/01/2023) =
 * Allow HTML allowed in a caption to be used with videos. Previously HTML was stripped from the caption.
