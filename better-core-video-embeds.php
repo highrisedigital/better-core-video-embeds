@@ -105,6 +105,7 @@ function hd_bcve_render_core_embed_block( $block_content, $block, $instance ) {
 
 		// for standard youtube URLs
 		case 'www.youtube.com':
+		case 'youtube.com':
 
 			// parse the query part of the URL into its arguments.
 			parse_str( $parsed_video_url['query'], $video_url_query_args );
@@ -141,7 +142,8 @@ function hd_bcve_render_core_embed_block( $block_content, $block, $instance ) {
 			break;
 
 		// for vimeo urls.
-		case 'vimeo.com';
+		case 'vimeo.com':
+		case 'www.vimeo.com':
 		
 			// if we have a path.
 			if ( empty( $parsed_video_url['path'] ) ) {
@@ -158,7 +160,8 @@ function hd_bcve_render_core_embed_block( $block_content, $block, $instance ) {
 			break;
 		
 		// for vimeo urls.
-		case 'www.dailymotion.com';
+		case 'www.dailymotion.com':
+		case 'dailymotion.com':
 
 			// if we have a path.
 			if ( empty( $parsed_video_url['path'] ) ) {
