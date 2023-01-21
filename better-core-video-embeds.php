@@ -391,7 +391,7 @@ function hd_bcve_get_dailymotion_video_thumbnail_url( $video_id = '' ) {
  *
  * @param array An array of HTML elements allowed.
  */
-function hd_job_allowed_innerblock_html() {
+function hd_bcve_allowed_innerblock_html() {
 
 	/**
 	 * Return the allowed html
@@ -527,7 +527,7 @@ function hd_bcve_add_original_embed_template( $block, $video_id, $thumbnail_url,
 
 	?>
 	<template id="hd-bcve-embed-html-<?php echo esc_attr( $video_id ); ?>">
-		<?php echo wp_kses( $block['innerHTML'], hd_job_allowed_innerblock_html() ); ?>
+		<?php echo wp_kses( $block['innerHTML'], hd_bcve_allowed_innerblock_html() ); ?>
 	</template>
 	<?php
 
