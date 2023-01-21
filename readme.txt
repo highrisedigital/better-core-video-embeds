@@ -4,7 +4,7 @@ Donate link: https://example.com/
 Tags: embed, oembed, youtube, vimeo, performance, blocks
 Requires at least: 6.0
 Tested up to: 6.1.1
-Stable tag: 1.1.2
+Stable tag: 1.1.3
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -44,6 +44,10 @@ The plugin provides progressive enhancement, therefore if you no longer use this
 1. Example of an embedded Youtube video in a post when using Better Core Embeds
 
 == Changelog ==
+
+= 1.1.3 (21/01/2023) =
+* Ensure the plugin works on videos embedded from the www or no www version of a domain e.g. www.youtube.com and youtube.com.
+* Output an alt attribute on the video thumbnail image.
 
 = 1.1.2 (18/01/2023) =
 * Allow HTML allowed in a caption to be used with videos. Previously HTML was stripped from the caption.
