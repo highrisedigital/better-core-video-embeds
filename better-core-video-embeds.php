@@ -4,7 +4,7 @@ Plugin Name: Better Core Video Embeds
 Description: A plugin which enhances the core video embeds for Youtube and Vimeo videos by not loading unnecessary scripts until they are needed.
 Requires at least: 6.0
 Requires PHP: 7.0
-Version: 1.1.2
+Version: 1.1.3
 Author: Highrise Digital
 Author URI: https://highrise.digital/
 License: GPL-2.0-or-later
@@ -105,6 +105,7 @@ function hd_bcve_render_core_embed_block( $block_content, $block, $instance ) {
 
 		// for standard youtube URLs
 		case 'www.youtube.com':
+		case 'youtube.com':
 
 			// parse the query part of the URL into its arguments.
 			parse_str( $parsed_video_url['query'], $video_url_query_args );
@@ -141,7 +142,8 @@ function hd_bcve_render_core_embed_block( $block_content, $block, $instance ) {
 			break;
 
 		// for vimeo urls.
-		case 'vimeo.com';
+		case 'vimeo.com':
+		case 'www.vimeo.com':
 		
 			// if we have a path.
 			if ( empty( $parsed_video_url['path'] ) ) {
@@ -158,7 +160,8 @@ function hd_bcve_render_core_embed_block( $block_content, $block, $instance ) {
 			break;
 		
 		// for vimeo urls.
-		case 'www.dailymotion.com';
+		case 'www.dailymotion.com':
+		case 'dailymotion.com':
 
 			// if we have a path.
 			if ( empty( $parsed_video_url['path'] ) ) {
@@ -388,7 +391,7 @@ function hd_bcve_get_dailymotion_video_thumbnail_url( $video_id = '' ) {
  *
  * @param array An array of HTML elements allowed.
  */
-function hd_job_allowed_innerblock_html() {
+function hd_bcve_allowed_innerblock_html() {
 
 	/**
 	 * Return the allowed html
@@ -486,7 +489,7 @@ add_action( 'hd_bcve_video_thumbnail_markup', 'hd_bcve_add_video_play_button', 2
 function hd_bcve_add_video_thumbnail_markup( $block, $video_id, $thumbnail_url, $wrapper_classes ) {
 
 	?>
-	<img loading="lazy" class="hd-bcve-thumbnail" src="<?php echo esc_url( $thumbnail_url ); ?>" />
+	<img loading="lazy" class="hd-bcve-thumbnail" alt="" src="<?php echo esc_url( $thumbnail_url ); ?>" />
 	<?php
 
 }
@@ -524,7 +527,7 @@ function hd_bcve_add_original_embed_template( $block, $video_id, $thumbnail_url,
 
 	?>
 	<template id="hd-bcve-embed-html-<?php echo esc_attr( $video_id ); ?>">
-		<?php echo wp_kses( $block['innerHTML'], hd_job_allowed_innerblock_html() ); ?>
+		<?php echo wp_kses( $block['innerHTML'], hd_bcve_allowed_innerblock_html() ); ?>
 	</template>
 	<?php
 
