@@ -4,7 +4,7 @@ Plugin Name: Better Core Video Embeds
 Description: A plugin which enhances the core video embeds for Youtube and Vimeo videos by not loading unnecessary scripts until they are needed.
 Requires at least: 6.0
 Requires PHP: 7.0
-Version: 1.1.3
+Version: 1.1.4
 Author: Highrise Digital
 Author URI: https://highrise.digital/
 License: GPL-2.0-or-later
@@ -30,23 +30,19 @@ function hd_bcve_plugins_loaded() {
 add_action( 'plugins_loaded', 'hd_bcve_plugins_loaded' );
 
 /**
- * Enqueus the frontend JS for the plugin.
+ * Enqueues the frontend JS for the plugin.
  */
 function hd_bcve_enqueue_scripts() {
 
-	// only if the page has a core embed block present.
-	if ( has_block( 'core/embed' ) ) {
+	// enqueue the front end script to invoking the video embed on image click.
+	wp_enqueue_script(
+		'better-core-video-embeds-js',
+		HD_BCVE_LOCATION_URL . '/assets/js/better-core-video-embeds.min.js',
+		false,
+		false,
+		true
+	);
 
-		// enqueue the front end script to invoking the video embed on image click.
-		wp_enqueue_script(
-			'better-core-video-embeds-js',
-			HD_BCVE_LOCATION_URL . '/assets/js/better-core-video-embeds.min.js',
-			false,
-			false,
-			true
-		);
-
-	}
 }
 
 add_action( 'wp_enqueue_scripts', 'hd_bcve_enqueue_scripts' );
@@ -56,16 +52,11 @@ add_action( 'wp_enqueue_scripts', 'hd_bcve_enqueue_scripts' );
  */
 function hd_bcve_register_block_style() {
 
-	// only if the page has a core embed block present.
-	if ( has_block( 'core/embed' ) ) {
-
-		// register the style for this block.
-		wp_enqueue_style(
-			'better-core-video-embeds-styles',
-			HD_BCVE_LOCATION_URL . '/assets/css/better-core-video-embeds.min.css'
-		);
-
-	}
+	// register the style for this block.
+	wp_enqueue_style(
+		'better-core-video-embeds-styles',
+		HD_BCVE_LOCATION_URL . '/assets/css/better-core-video-embeds.min.css'
+	);
 
 }
 

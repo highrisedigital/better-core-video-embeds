@@ -45,6 +45,9 @@ The plugin provides progressive enhancement, therefore if you no longer use this
 
 == Changelog ==
 
+= 1.1.4 (22/02/2023) =
+* Load the CSS and JS on all pages. Fixes problems when post content is output on templates such as archives. Found when using full site editing and the query block.
+
 = 1.1.3 (21/01/2023) =
 * Ensure the plugin works on videos embedded from the www or no www version of a domain e.g. www.youtube.com and youtube.com.
 * Output an alt attribute on the video thumbnail image.
