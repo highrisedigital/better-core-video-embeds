@@ -3,9 +3,9 @@ Contributors: highrisedigital,wpmarkuk
 Donate link: https://example.com/
 Tags: embed, oembed, youtube, vimeo, performance, blocks
 Requires at least: 6.0
-Tested up to: 6.1.1
-Stable tag: 1.1.3
-Requires PHP: 7.0
+Tested up to: 6.4.2
+Stable tag: 1.2
+Requires PHP: 8.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -44,6 +44,10 @@ The plugin provides progressive enhancement, therefore if you no longer use this
 1. Example of an embedded Youtube video in a post when using Better Core Embeds
 
 == Changelog ==
+
+= 1.2 (07/12/2023) =
+* Add a name for the wrapper CSS filter which was missing.
+* JS and CSS target using different classes.
 
 = 1.1.4 (22/02/2023) =
 * Load the CSS and JS on all pages. Fixes problems when post content is output on templates such as archives. Found when using full site editing and the query block.
