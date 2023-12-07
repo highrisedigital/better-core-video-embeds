@@ -34,15 +34,19 @@ add_action( 'plugins_loaded', 'hd_bcve_plugins_loaded' );
  */
 function hd_bcve_enqueue_scripts() {
 
-	// enqueue the front end script to invoking the video embed on image click.
-	wp_enqueue_script(
-		'better-core-video-embeds-js',
-		HD_BCVE_LOCATION_URL . '/assets/js/better-core-video-embeds.min.js',
-		false,
-		false,
-		true
-	);
+	// only if the page has a core embed block present.
+	if ( has_block( 'core/embed' ) ) {
 
+		// enqueue the front end script to invoking the video embed on image click.
+		wp_enqueue_script(
+			'better-core-video-embeds-js',
+			HD_BCVE_LOCATION_URL . '/assets/js/better-core-video-embeds.min.js',
+			false,
+			false,
+			true
+		);
+
+	}
 }
 
 add_action( 'wp_enqueue_scripts', 'hd_bcve_enqueue_scripts' );
@@ -52,11 +56,16 @@ add_action( 'wp_enqueue_scripts', 'hd_bcve_enqueue_scripts' );
  */
 function hd_bcve_register_block_style() {
 
-	// register the style for this block.
-	wp_enqueue_style(
-		'better-core-video-embeds-styles',
-		HD_BCVE_LOCATION_URL . '/assets/css/better-core-video-embeds.min.css'
-	);
+	// only if the page has a core embed block present.
+	if ( has_block( 'core/embed' ) ) {
+
+		// register the style for this block.
+		wp_enqueue_style(
+			'better-core-video-embeds-styles',
+			HD_BCVE_LOCATION_URL . '/assets/css/better-core-video-embeds.min.css'
+		);
+
+	}
 
 }
 
@@ -184,6 +193,7 @@ function hd_bcve_render_core_embed_block( $block_content, $block, $instance ) {
 	$wrapper_classes = [
 		'wp-block-image',
 		'hd-bcve-wrapper',
+		'hd-bcve-wrapper-js',
 		'is--' . $block['attrs']['providerNameSlug'],
 	];
 
@@ -207,7 +217,7 @@ function hd_bcve_render_core_embed_block( $block_content, $block, $instance ) {
 	}
 
 	// allow the classes to be filtered.
-	$wrapper_classes = apply_filters( '', $wrapper_classes, $block, $video_id, $thumbnail_url );
+	$wrapper_classes = apply_filters( 'hd_bcve_wrapper_classes', $wrapper_classes, $block, $video_id, $thumbnail_url );
 
 	// buffer the output as we need to return not echo.
 	ob_start();

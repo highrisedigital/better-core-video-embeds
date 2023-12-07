@@ -1,6 +1,6 @@
 // loop through each of the hd core embed wrapper elements on the page.
 // these are the elements that should contain the thumbnail.
-document.querySelectorAll( '.hd-bcve-wrapper' ).forEach(( el, i ) => {
+document.querySelectorAll( '.hd-bcve-wrapper-js' ).forEach(( el, i ) => {
 
 	// get the associated template element which holds the embed code.
 	// it is the next element after the wrapper.
