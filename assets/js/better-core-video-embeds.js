@@ -22,22 +22,6 @@ document.querySelectorAll( '.hd-bcve-wrapper-js' ).forEach(( el, i ) => {
 	// set an allows attribute on the iframe with an autoplay value.
 	iframe.setAttribute( 'allow', 'autoplay' );
 
-	// get the first child of the figure - the caption.
-	var caption = template.content.children[0].querySelector( 'figcaption' );
-
-	// if we have a caption.
-	if ( caption ) {
-
-		// create an element for the embed caption.
-		var captionEl = document.createElement('figcaption');
-		captionEl.classList.add( 'wp-element-caption' );
-		captionEl.innerHTML = caption.innerHTML;
-	
-		// add the caption, after the thumbnail.
-		el.append( captionEl );
-
-	}
-
 	// create an array for storing the click event elements.
 	var clickEls = [];
 

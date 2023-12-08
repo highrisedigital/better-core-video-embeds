@@ -62,7 +62,7 @@ function hd_bcve_register_block_style() {
 		// register the style for this block.
 		wp_enqueue_style(
 			'better-core-video-embeds-styles',
-			HD_BCVE_LOCATION_URL . '/assets/css/better-core-video-embeds.min.css'
+			HD_BCVE_LOCATION_URL . '/assets/css/better-core-video-embeds.css'
 		);
 
 	}
@@ -219,6 +219,28 @@ function hd_bcve_render_core_embed_block( $block_content, $block, $instance ) {
 	// allow the classes to be filtered.
 	$wrapper_classes = apply_filters( 'hd_bcve_wrapper_classes', $wrapper_classes, $block, $video_id, $thumbnail_url );
 
+	/**
+	 * Lets grab the video caption.
+	 */
+
+	// set a default video caption.
+	$video_caption = '';
+
+	// creates new instance of DOMDocument class
+	$dom = new domDocument;
+
+	// load the html from block content.
+	@$dom->loadHTML( $block_content );
+
+	// stores all elements of figcaption - there should only be one.
+	$figcaptions = $dom->getElementsByTagName( 'figcaption' );
+
+	// if we have figcaptions.
+	if ( 0 !== $figcaptions->length ) {
+		// store the first figcaption.
+		$video_caption = $dom->saveHtml( $figcaptions[0] );	
+	}
+
 	// buffer the output as we need to return not echo.
 	ob_start();
 
@@ -234,7 +256,7 @@ function hd_bcve_render_core_embed_block( $block_content, $block, $instance ) {
 	 * @hooked hd_bvce_close_markup_figure_element - 40
 	 * @hooked hd_bcve_add_original_embed_template - 50
 	 */
-	do_action( 'hd_bcve_video_thumbnail_markup', $block, $video_id, $thumbnail_url, $wrapper_classes );
+	do_action( 'hd_bcve_video_thumbnail_markup', $block, $video_id, $thumbnail_url, $wrapper_classes, $video_caption );
 
 	// return the new block markup.
 	return ob_get_clean();
@@ -472,7 +494,7 @@ add_action( 'hd_bcve_video_thumbnail_markup', 'hd_bvce_open_markup_figure_elemen
 function hd_bcve_add_video_play_button( $block, $video_id, $thumbnail_url, $wrapper_classes ) {
 
 	?>
-	<div class="play-button"></div>
+	<button class="play-button" aria-label="<?php esc_attr_e( 'Play video'); ?>"></button>
 	<?php
 
 }
@@ -496,6 +518,30 @@ function hd_bcve_add_video_thumbnail_markup( $block, $video_id, $thumbnail_url, 
 }
 
 add_action( 'hd_bcve_video_thumbnail_markup', 'hd_bcve_add_video_thumbnail_markup', 30, 4 );
+
+/**
+ * Adds the video thumbnail markup output.
+ *
+ * @param array  $block           The block array.
+ * @param string $video_id        The ID of the embedded video.
+ * @param string $thumbnail_url   The URL of the video thumbnail.
+ * @param array  $wrapper_classes An array of CSS classes to add to the wrapper.
+ * @param string $video_caption   The caption of the video or an empty string.
+ */
+function hd_bcve_add_video_caption_markup( $block, $video_id, $thumbnail_url, $wrapper_classes, $video_caption ) {
+
+	// if we have no caption available.
+	if ( '' === $video_caption ) {
+		return;
+	}
+
+	?>
+	<?php echo wp_kses( $video_caption, hd_bcve_allowed_innerblock_html() ); ?>
+	<?php
+
+}
+
+add_action( 'hd_bcve_video_thumbnail_markup', 'hd_bcve_add_video_caption_markup', 35, 5 );
 
 /**
  * Adds the closing figure element to the thumbnail markup.
