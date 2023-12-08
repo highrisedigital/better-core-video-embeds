@@ -54,5 +54,9 @@
 }
 .hd-bcve-wrapper.wp-embed-aspect-4-3 .hd-bcve-thumbnail {
 	aspect-ratio: 1.33;
-    object-fit: cover;
+	object-fit: cover;
+}
+.hd-bcve-wrapper.wp-embed-aspect-16-9 .hd-bcve-thumbnail {
+	aspect-ratio: 1.777777777777778;
+	object-fit: cover;
 }

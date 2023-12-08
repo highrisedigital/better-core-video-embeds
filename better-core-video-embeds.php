@@ -52,6 +52,27 @@ function hd_bcve_enqueue_scripts() {
 add_action( 'wp_enqueue_scripts', 'hd_bcve_enqueue_scripts' );
 
 /**
+ * Enqueues the block editor JS for the plugin.
+ */
+function hd_bcve_enqueue_block_editor_assets() {
+
+	// get the assets file.
+	$asset_file = include( plugin_dir_path( __FILE__ ) . '/build/index.asset.php' );
+
+	// enqueue the block editor script.
+	wp_enqueue_script(
+		'hd-bcve-block-editor-js',
+		HD_BCVE_LOCATION_URL . '/build/index.js',
+		$asset_file['dependencies'],
+		$asset_file['version'],
+		true
+	);
+
+}
+
+add_action( 'enqueue_block_editor_assets', 'hd_bcve_enqueue_block_editor_assets' );
+
+/**
  * Register a stylesheet for this block.
  */
 function hd_bcve_register_block_style() {
@@ -118,8 +139,18 @@ function hd_bcve_render_core_embed_block( $block_content, $block, $instance ) {
 			// set the video id to the v query arg.
 			$video_id = $video_url_query_args['v'];
 
-			// get the youtube thumbnail url.
-			$thumbnail_url = hd_bcve_get_youtube_video_thumbnail_url( $video_id );
+			// if we don't have a custom thumbnail.
+			if ( empty( $block['attrs']['thumbnailUrl'] ) ) {
+
+				// get the youtube thumbnail url.
+				$thumbnail_url = hd_bcve_get_youtube_video_thumbnail_url( $video_id );
+
+			} else {
+
+				// set the thumbnail url to the custom thumbnail.
+				$thumbnail_url = $block['attrs']['thumbnailUrl'];
+
+			}
 
 			// break out the switch.
 			break;
@@ -185,7 +216,7 @@ function hd_bcve_render_core_embed_block( $block_content, $block, $instance ) {
 	}
 
 	// if we don't have a video thumbnail url.
-	if ( '' === $thumbnail_url ) {
+	if ( '' === $block['attrs']['thumbnailUrl'] ) {
 		return $block_content;
 	}
 
