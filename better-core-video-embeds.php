@@ -83,7 +83,7 @@ function hd_bcve_register_block_style() {
 		// register the style for this block.
 		wp_enqueue_style(
 			'better-core-video-embeds-styles',
-			HD_BCVE_LOCATION_URL . '/assets/css/better-core-video-embeds.css'
+			HD_BCVE_LOCATION_URL . '/assets/css/better-core-video-embeds.min.css'
 		);
 
 	}
