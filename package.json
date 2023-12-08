@@ -16,5 +16,8 @@
 	},
 	"devDependencies": {
 		"@wordpress/scripts": "^26.18.0"
+	},
+	"dependencies": {
+		"@10up/block-components": "^1.17.3"
 	}
 }
