@@ -115,7 +115,15 @@ function hd_bcve_render_core_embed_block( $block_content, $block, $instance ) {
 
 	// create a default video id, url and thumbnail url.
 	$video_id = '';
-	$thumbnail_url = wp_get_attachment_image_url( $block['attrs']['thumbnailId'], 'full', false );
+	$thumbnail_url = '';
+
+	// if we have a thumbnail ID attribute.
+	if ( ! empty( $block['attrs']['thumbnailId'] ) ) {
+
+		// get the thumbnail URL from the thumbnail ID.
+		$thumbnail_url = wp_get_attachment_image_url( $block['attrs']['thumbnailId'], 'full' );
+
+	}
 
 	// grab the video id.
 	$video_url = $block['attrs']['url'];
