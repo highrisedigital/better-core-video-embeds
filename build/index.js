@@ -17223,7 +17223,8 @@ function Edit(props) {
     setAttributes
   } = props;
   const {
-    thumbnailId
+    thumbnailId,
+    providerNameSlug
   } = attributes;
   function handleImageSelect(image) {
     setAttributes({
@@ -17235,25 +17236,28 @@ function Edit(props) {
       thumbnailId: null
     });
   }
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__.InspectorControls, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.PanelBody, {
-    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)("Video Thumbnail")
-  }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.PanelRow, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_10up_block_components__WEBPACK_IMPORTED_MODULE_6__.Image, {
-    id: thumbnailId,
-    className: "bcve-thumbnail",
-    size: "medium",
-    onSelect: handleImageSelect,
-    allowedTypes: ['image'],
-    canEditImage: true,
-    labels: {
-      title: '',
-      instructions: 'Select or upload a custom video thumbnail.'
-    }
-  })), null !== thumbnailId && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.PanelRow, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_10up_block_components__WEBPACK_IMPORTED_MODULE_6__.MediaToolbar, {
-    isOptional: true,
-    id: thumbnailId,
-    onSelect: handleImageSelect,
-    onRemove: handleImageRemove
-  }))));
+  return (
+    // only add the video thumnail option if the video is from youtube, vimeo, or dailymotion.
+    'youtube' !== providerNameSlug && 'vimeo' !== providerNameSlug && 'dailymotion' !== providerNameSlug ? null : (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_3__.InspectorControls, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.PanelBody, {
+      title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)("Video Thumbnail")
+    }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.PanelRow, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_10up_block_components__WEBPACK_IMPORTED_MODULE_6__.Image, {
+      id: thumbnailId,
+      className: "bcve-thumbnail",
+      size: "medium",
+      onSelect: handleImageSelect,
+      allowedTypes: ['image'],
+      canEditImage: true,
+      labels: {
+        title: '',
+        instructions: 'Select or upload a custom video thumbnail.'
+      }
+    })), null !== thumbnailId && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.PanelRow, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_10up_block_components__WEBPACK_IMPORTED_MODULE_6__.MediaToolbar, {
+      isOptional: true,
+      id: thumbnailId,
+      onSelect: handleImageSelect,
+      onRemove: handleImageRemove
+    }))))
+  );
 }
 
 /**
