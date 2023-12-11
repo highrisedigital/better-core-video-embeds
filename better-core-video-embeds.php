@@ -52,6 +52,27 @@ function hd_bcve_enqueue_scripts() {
 add_action( 'wp_enqueue_scripts', 'hd_bcve_enqueue_scripts' );
 
 /**
+ * Enqueues the block editor JS for the plugin.
+ */
+function hd_bcve_enqueue_block_editor_assets() {
+
+	// get the assets file.
+	$asset_file = include( plugin_dir_path( __FILE__ ) . '/build/index.asset.php' );
+
+	// enqueue the block editor script.
+	wp_enqueue_script(
+		'hd-bcve-block-editor-js',
+		HD_BCVE_LOCATION_URL . '/build/index.js',
+		$asset_file['dependencies'],
+		$asset_file['version'],
+		true
+	);
+
+}
+
+add_action( 'enqueue_block_editor_assets', 'hd_bcve_enqueue_block_editor_assets' );
+
+/**
  * Register a stylesheet for this block.
  */
 function hd_bcve_register_block_style() {
@@ -62,7 +83,7 @@ function hd_bcve_register_block_style() {
 		// register the style for this block.
 		wp_enqueue_style(
 			'better-core-video-embeds-styles',
-			HD_BCVE_LOCATION_URL . '/assets/css/better-core-video-embeds.css'
+			HD_BCVE_LOCATION_URL . '/assets/css/better-core-video-embeds.min.css'
 		);
 
 	}
@@ -96,6 +117,14 @@ function hd_bcve_render_core_embed_block( $block_content, $block, $instance ) {
 	$video_id = '';
 	$thumbnail_url = '';
 
+	// if we have a thumbnail ID attribute.
+	if ( ! empty( $block['attrs']['thumbnailId'] ) ) {
+
+		// get the thumbnail URL from the thumbnail ID.
+		$thumbnail_url = wp_get_attachment_image_url( $block['attrs']['thumbnailId'], 'full' );
+
+	}
+
 	// grab the video id.
 	$video_url = $block['attrs']['url'];
 	$parsed_video_url = parse_url( $video_url );
@@ -118,8 +147,13 @@ function hd_bcve_render_core_embed_block( $block_content, $block, $instance ) {
 			// set the video id to the v query arg.
 			$video_id = $video_url_query_args['v'];
 
-			// get the youtube thumbnail url.
-			$thumbnail_url = hd_bcve_get_youtube_video_thumbnail_url( $video_id );
+			// if we don't have a custom thumbnail.
+			if ( empty( $thumbnail_url ) ) {
+
+				// get the youtube thumbnail url.
+				$thumbnail_url = hd_bcve_get_youtube_video_thumbnail_url( $video_id );
+
+			}
 
 			// break out the switch.
 			break;
@@ -135,8 +169,13 @@ function hd_bcve_render_core_embed_block( $block_content, $block, $instance ) {
 			// remove the preceeding slash.
 			$video_id = str_replace( '/', '', $parsed_video_url['path'] );
 
-			// get the youtube thumbnail url.
-			$thumbnail_url = hd_bcve_get_youtube_video_thumbnail_url( $video_id );
+			// if we don't have a custom thumbnail.
+			if ( empty( $thumbnail_url ) ) {
+
+				// get the youtube thumbnail url.
+				$thumbnail_url = hd_bcve_get_youtube_video_thumbnail_url( $video_id );
+
+			}
 
 			// break out the switch.
 			break;
@@ -153,8 +192,13 @@ function hd_bcve_render_core_embed_block( $block_content, $block, $instance ) {
 			// remove the preceeding slash.
 			$video_id = str_replace( '/', '', $parsed_video_url['path'] );
 
-			// get the vimeo thumbnail url for this video.
-			$thumbnail_url = hd_bcve_get_vimeo_video_thumbnail_url( $video_id );
+			// if we don't have a custom thumbnail.
+			if ( empty( $thumbnail_url ) ) {
+
+				// get the vimeo thumbnail url for this video.
+				$thumbnail_url = hd_bcve_get_vimeo_video_thumbnail_url( $video_id );
+
+			}
 
 			// break out the switch.
 			break;
@@ -171,8 +215,13 @@ function hd_bcve_render_core_embed_block( $block_content, $block, $instance ) {
 			// remove the preceeding slash.
 			$video_id = str_replace( '/video/', '', $parsed_video_url['path'] );
 
-			// get the vimeo thumbnail url for this video.
-			$thumbnail_url = hd_bcve_get_dailymotion_video_thumbnail_url( $video_id );
+			// if we don't have a custom thumbnail.
+			if ( empty( $thumbnail_url ) ) {
+
+				// get the vimeo thumbnail url for this video.
+				$thumbnail_url = hd_bcve_get_dailymotion_video_thumbnail_url( $video_id );
+			
+			}
 			
 			// break out the switch.
 			break;
