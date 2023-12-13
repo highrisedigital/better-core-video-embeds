@@ -21,8 +21,8 @@
     width: var(--hd-play-button-size);
     height: var(--hd-play-button-size);
 	cursor: pointer;
-	background-color: transparent;
-    border: none;
+	background-color: transparent !important;
+    border: none !important;
 	margin: 0;
 	padding: 0;
 }
