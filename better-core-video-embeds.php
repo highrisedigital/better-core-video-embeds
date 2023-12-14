@@ -4,7 +4,7 @@ Plugin Name: Better Core Video Embeds
 Description: A plugin which enhances the core video embeds for Youtube and Vimeo videos by not loading unnecessary scripts until they are needed.
 Requires at least: 6.0
 Requires PHP: 7.0
-Version: 1.2
+Version: 1.3
 Author: Highrise Digital
 Author URI: https://highrise.digital/
 License: GPL-2.0-or-later
