@@ -43,7 +43,7 @@ function hd_bcve_enqueue_scripts() {
 			'better-core-video-embeds-js',
 			HD_BCVE_LOCATION_URL . '/assets/js/better-core-video-embeds.min.js',
 			false,
-			false,
+			HD_BCVE_VERSION,
 			true
 		);
 
