@@ -15,6 +15,7 @@ Text Domain: better-core-video-embeds
 // define variable for path to this plugin file.
 define( 'HD_BCVE_LOCATION', dirname( __FILE__ ) );
 define( 'HD_BCVE_LOCATION_URL', plugins_url( '', __FILE__ ) );
+define( 'HD_BCVE_VERSION', '1.3' );
 
 /**
  * Function to run on plugins load.
@@ -42,7 +43,7 @@ function hd_bcve_enqueue_scripts() {
 			'better-core-video-embeds-js',
 			HD_BCVE_LOCATION_URL . '/assets/js/better-core-video-embeds.min.js',
 			false,
-			false,
+			HD_BCVE_VERSION,
 			true
 		);
 
@@ -83,7 +84,9 @@ function hd_bcve_register_block_style() {
 		// register the style for this block.
 		wp_enqueue_style(
 			'better-core-video-embeds-styles',
-			HD_BCVE_LOCATION_URL . '/assets/css/better-core-video-embeds.min.css'
+			HD_BCVE_LOCATION_URL . '/assets/css/better-core-video-embeds.min.css',
+			[],
+			HD_BCVE_VERSION
 		);
 
 	}
