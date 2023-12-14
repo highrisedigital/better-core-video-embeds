@@ -4,7 +4,7 @@ Plugin Name: Better Core Video Embeds
 Description: A plugin which enhances the core video embeds for Youtube and Vimeo videos by not loading unnecessary scripts until they are needed.
 Requires at least: 6.0
 Requires PHP: 7.0
-Version: 1.2
+Version: 1.3
 Author: Highrise Digital
 Author URI: https://highrise.digital/
 License: GPL-2.0-or-later
@@ -52,6 +52,27 @@ function hd_bcve_enqueue_scripts() {
 add_action( 'wp_enqueue_scripts', 'hd_bcve_enqueue_scripts' );
 
 /**
+ * Enqueues the block editor JS for the plugin.
+ */
+function hd_bcve_enqueue_block_editor_assets() {
+
+	// get the assets file.
+	$asset_file = include( plugin_dir_path( __FILE__ ) . '/build/index.asset.php' );
+
+	// enqueue the block editor script.
+	wp_enqueue_script(
+		'hd-bcve-block-editor-js',
+		HD_BCVE_LOCATION_URL . '/build/index.js',
+		$asset_file['dependencies'],
+		$asset_file['version'],
+		true
+	);
+
+}
+
+add_action( 'enqueue_block_editor_assets', 'hd_bcve_enqueue_block_editor_assets' );
+
+/**
  * Register a stylesheet for this block.
  */
 function hd_bcve_register_block_style() {
@@ -96,6 +117,14 @@ function hd_bcve_render_core_embed_block( $block_content, $block, $instance ) {
 	$video_id = '';
 	$thumbnail_url = '';
 
+	// if we have a thumbnail ID attribute.
+	if ( ! empty( $block['attrs']['thumbnailId'] ) ) {
+
+		// get the thumbnail URL from the thumbnail ID.
+		$thumbnail_url = wp_get_attachment_image_url( $block['attrs']['thumbnailId'], 'full' );
+
+	}
+
 	// grab the video id.
 	$video_url = $block['attrs']['url'];
 	$parsed_video_url = parse_url( $video_url );
@@ -118,8 +147,13 @@ function hd_bcve_render_core_embed_block( $block_content, $block, $instance ) {
 			// set the video id to the v query arg.
 			$video_id = $video_url_query_args['v'];
 
-			// get the youtube thumbnail url.
-			$thumbnail_url = hd_bcve_get_youtube_video_thumbnail_url( $video_id );
+			// if we don't have a custom thumbnail.
+			if ( empty( $thumbnail_url ) ) {
+
+				// get the youtube thumbnail url.
+				$thumbnail_url = hd_bcve_get_youtube_video_thumbnail_url( $video_id );
+
+			}
 
 			// break out the switch.
 			break;
@@ -135,8 +169,13 @@ function hd_bcve_render_core_embed_block( $block_content, $block, $instance ) {
 			// remove the preceeding slash.
 			$video_id = str_replace( '/', '', $parsed_video_url['path'] );
 
-			// get the youtube thumbnail url.
-			$thumbnail_url = hd_bcve_get_youtube_video_thumbnail_url( $video_id );
+			// if we don't have a custom thumbnail.
+			if ( empty( $thumbnail_url ) ) {
+
+				// get the youtube thumbnail url.
+				$thumbnail_url = hd_bcve_get_youtube_video_thumbnail_url( $video_id );
+
+			}
 
 			// break out the switch.
 			break;
@@ -153,8 +192,13 @@ function hd_bcve_render_core_embed_block( $block_content, $block, $instance ) {
 			// remove the preceeding slash.
 			$video_id = str_replace( '/', '', $parsed_video_url['path'] );
 
-			// get the vimeo thumbnail url for this video.
-			$thumbnail_url = hd_bcve_get_vimeo_video_thumbnail_url( $video_id );
+			// if we don't have a custom thumbnail.
+			if ( empty( $thumbnail_url ) ) {
+
+				// get the vimeo thumbnail url for this video.
+				$thumbnail_url = hd_bcve_get_vimeo_video_thumbnail_url( $video_id );
+
+			}
 
 			// break out the switch.
 			break;
@@ -171,8 +215,13 @@ function hd_bcve_render_core_embed_block( $block_content, $block, $instance ) {
 			// remove the preceeding slash.
 			$video_id = str_replace( '/video/', '', $parsed_video_url['path'] );
 
-			// get the vimeo thumbnail url for this video.
-			$thumbnail_url = hd_bcve_get_dailymotion_video_thumbnail_url( $video_id );
+			// if we don't have a custom thumbnail.
+			if ( empty( $thumbnail_url ) ) {
+
+				// get the vimeo thumbnail url for this video.
+				$thumbnail_url = hd_bcve_get_dailymotion_video_thumbnail_url( $video_id );
+			
+			}
 			
 			// break out the switch.
 			break;
@@ -219,6 +268,28 @@ function hd_bcve_render_core_embed_block( $block_content, $block, $instance ) {
 	// allow the classes to be filtered.
 	$wrapper_classes = apply_filters( 'hd_bcve_wrapper_classes', $wrapper_classes, $block, $video_id, $thumbnail_url );
 
+	/**
+	 * Lets grab the video caption.
+	 */
+
+	// set a default video caption.
+	$video_caption = '';
+
+	// creates new instance of DOMDocument class
+	$dom = new domDocument;
+
+	// load the html from block content.
+	@$dom->loadHTML( $block_content );
+
+	// stores all elements of figcaption - there should only be one.
+	$figcaptions = $dom->getElementsByTagName( 'figcaption' );
+
+	// if we have figcaptions.
+	if ( 0 !== $figcaptions->length ) {
+		// store the first figcaption.
+		$video_caption = $dom->saveHtml( $figcaptions[0] );	
+	}
+
 	// buffer the output as we need to return not echo.
 	ob_start();
 
@@ -234,7 +305,7 @@ function hd_bcve_render_core_embed_block( $block_content, $block, $instance ) {
 	 * @hooked hd_bvce_close_markup_figure_element - 40
 	 * @hooked hd_bcve_add_original_embed_template - 50
 	 */
-	do_action( 'hd_bcve_video_thumbnail_markup', $block, $video_id, $thumbnail_url, $wrapper_classes );
+	do_action( 'hd_bcve_video_thumbnail_markup', $block, $video_id, $thumbnail_url, $wrapper_classes, $video_caption );
 
 	// return the new block markup.
 	return ob_get_clean();
@@ -472,7 +543,7 @@ add_action( 'hd_bcve_video_thumbnail_markup', 'hd_bvce_open_markup_figure_elemen
 function hd_bcve_add_video_play_button( $block, $video_id, $thumbnail_url, $wrapper_classes ) {
 
 	?>
-	<div class="play-button"></div>
+	<button class="play-button" aria-label="<?php esc_attr_e( 'Play video' ); ?>"></button>
 	<?php
 
 }
@@ -496,6 +567,30 @@ function hd_bcve_add_video_thumbnail_markup( $block, $video_id, $thumbnail_url, 
 }
 
 add_action( 'hd_bcve_video_thumbnail_markup', 'hd_bcve_add_video_thumbnail_markup', 30, 4 );
+
+/**
+ * Adds the video thumbnail markup output.
+ *
+ * @param array  $block           The block array.
+ * @param string $video_id        The ID of the embedded video.
+ * @param string $thumbnail_url   The URL of the video thumbnail.
+ * @param array  $wrapper_classes An array of CSS classes to add to the wrapper.
+ * @param string $video_caption   The caption of the video or an empty string.
+ */
+function hd_bcve_add_video_caption_markup( $block, $video_id, $thumbnail_url, $wrapper_classes, $video_caption ) {
+
+	// if we have no caption available.
+	if ( '' === $video_caption ) {
+		return;
+	}
+
+	?>
+	<?php echo wp_kses( $video_caption, hd_bcve_allowed_innerblock_html() ); ?>
+	<?php
+
+}
+
+add_action( 'hd_bcve_video_thumbnail_markup', 'hd_bcve_add_video_caption_markup', 35, 5 );
 
 /**
  * Adds the closing figure element to the thumbnail markup.

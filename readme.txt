@@ -4,7 +4,7 @@ Donate link: https://example.com/
 Tags: embed, oembed, youtube, vimeo, performance, blocks
 Requires at least: 6.0
 Tested up to: 6.4.2
-Stable tag: 1.2
+Stable tag: 1.3
 Requires PHP: 8.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -39,11 +39,20 @@ It filters the embed block output to prevent Youtube and Vimeo scripts be loaded
 
 The plugin provides progressive enhancement, therefore if you no longer use this plugin, your embedded videos will revert back to the default WordPress behaviour.
 
+= Can I set a custom thumbnail, rather than the embed thumbnail? =
+
+Yes! As of version 1.3, you can set a custom thumbnail on the embed block and this will be used as the video thumbnail or poster image on the front end of the site.
+
 == Screenshots ==
 
 1. Example of an embedded Youtube video in a post when using Better Core Embeds
 
 == Changelog ==
+
+= 1.3 (14/12/2023) =
+* Add support for custom thumbnail or poster images for videos. These are upload in the block inspector.
+* Caption no longer added with JS which improves developer options.
+* Improved play button styling as well as making it an HTML button with an aria label for better accessibility.
 
 = 1.2 (07/12/2023) =
 * Add a name for the wrapper CSS filter which was missing.
