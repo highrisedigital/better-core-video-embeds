@@ -284,8 +284,8 @@ function hd_bcve_render_core_embed_block( $block_content, $block, $instance ) {
 	// load the html from block content.
 	@$dom->loadHTML( $block_content );
 
-	// added to prevent special characters, for example those in the french language, from being converted to html entities.
-	$dom->loadHTML (htmlspecialchars_decode( htmlentities( $block_content ) ) );
+	// added to prevent special characters, for example those in the french language, from being converted to html entities. Fix based on WP.org user submitted support request.
+	$dom->loadHTML( htmlspecialchars_decode( htmlentities( $block_content ) ) );
 
 	// stores all elements of figcaption - there should only be one.
 	$figcaptions = $dom->getElementsByTagName( 'figcaption' );
