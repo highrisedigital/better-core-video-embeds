@@ -4,7 +4,7 @@ Plugin Name: Better Core Video Embeds
 Description: A plugin which enhances the core video embeds for Youtube and Vimeo videos by not loading unnecessary scripts until they are needed.
 Requires at least: 6.0
 Requires PHP: 7.0
-Version: 1.3
+Version: 1.3.1
 Author: Highrise Digital
 Author URI: https://highrise.digital/
 License: GPL-2.0-or-later
@@ -15,7 +15,7 @@ Text Domain: better-core-video-embeds
 // define variable for path to this plugin file.
 define( 'HD_BCVE_LOCATION', dirname( __FILE__ ) );
 define( 'HD_BCVE_LOCATION_URL', plugins_url( '', __FILE__ ) );
-define( 'HD_BCVE_VERSION', '1.3' );
+define( 'HD_BCVE_VERSION', '1.3.1' );
 
 /**
  * Function to run on plugins load.
@@ -278,22 +278,18 @@ function hd_bcve_render_core_embed_block( $block_content, $block, $instance ) {
 	// set a default video caption.
 	$video_caption = '';
 
-	// creates new instance of DOMDocument class
-	$dom = new domDocument();
+	/**
+	 * Perform a regular expression match on the block content to find the caption.
+	 * Should match any figcaption tag with any attributes and any content.
+	 */
+  	preg_match( '/<figcaption(?:\s+.*?)?>(.*?)<\/figcaption>/s', $block_content, $match );
 
-	// load the html from block content.
-	@$dom->loadHTML( $block_content );
+	// if we have a match.
+	if ( ! empty( $match[1] ) ) {
 
-	// added to prevent special characters, for example those in the french language, from being converted to html entities. Fix based on WP.org user submitted support request.
-	$dom->loadHTML( htmlspecialchars_decode( htmlentities( $block_content ) ) );
+		// set the caption to the text content of the matched element - the video caption.
+		$video_caption = $match[1];
 
-	// stores all elements of figcaption - there should only be one.
-	$figcaptions = $dom->getElementsByTagName( 'figcaption' );
-
-	// if we have figcaptions.
-	if ( 0 !== $figcaptions->length ) {
-		// store the first figcaption.
-		$video_caption = $dom->saveHtml( $figcaptions[0] );	
 	}
 
 	// buffer the output as we need to return not echo.
@@ -308,6 +304,7 @@ function hd_bcve_render_core_embed_block( $block_content, $block, $instance ) {
 	 * @hooked hd_bvce_open_markup_figure_element - 10
 	 * @hooked hd_bcve_add_video_play_button - 20
 	 * @hooked hd_bcve_add_video_thumbnail_markup - 30
+	 * @hooked hd_bcve_add_video_caption_markup - 35
 	 * @hooked hd_bvce_close_markup_figure_element - 40
 	 * @hooked hd_bcve_add_original_embed_template - 50
 	 */
