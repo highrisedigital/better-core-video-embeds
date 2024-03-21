@@ -4,7 +4,7 @@ Plugin Name: Better Core Video Embeds
 Description: A plugin which enhances the core video embeds for Youtube and Vimeo videos by not loading unnecessary scripts until they are needed.
 Requires at least: 6.0
 Requires PHP: 7.0
-Version: 1.3.2
+Version: 1.3.3
 Author: Highrise Digital
 Author URI: https://highrise.digital/
 License: GPL-2.0-or-later
@@ -15,7 +15,7 @@ Text Domain: better-core-video-embeds
 // define variable for path to this plugin file.
 define( 'HD_BCVE_LOCATION', dirname( __FILE__ ) );
 define( 'HD_BCVE_LOCATION_URL', plugins_url( '', __FILE__ ) );
-define( 'HD_BCVE_VERSION', '1.3.2' );
+define( 'HD_BCVE_VERSION', '1.3.3' );
 
 /**
  * Function to run on plugins load.
@@ -139,16 +139,29 @@ function hd_bcve_render_core_embed_block( $block_content, $block, $instance ) {
 		case 'www.youtube.com':
 		case 'youtube.com':
 
-			// parse the query part of the URL into its arguments.
-			parse_str( $parsed_video_url['query'], $video_url_query_args );
+			if ( empty( $parsed_video_url['query'] ) ) {
 
-			// if we cannot find a youtube video id.
-			if ( empty( $video_url_query_args['v'] ) ) {
-				return $block_content;
+				// if we have a path.
+				if ( empty( $parsed_video_url['path'] ) ) {
+					return $block_content;
+				}
+
+				// remove live/embed path and trailing slash.
+				$video_id = str_replace( array( 'live/', 'embed/', '/' ), '', $parsed_video_url['path'] );
+
+			} else {
+
+				// parse the query part of the URL into its arguments.
+				parse_str( $parsed_video_url['query'], $video_url_query_args );
+
+				// if we cannot find a youtube video id.
+				if ( empty( $video_url_query_args['v'] ) ) {
+					return $block_content;
+				}
+
+				// set the video id to the v query arg.
+				$video_id = $video_url_query_args['v'];
 			}
-
-			// set the video id to the v query arg.
-			$video_id = $video_url_query_args['v'];
 
 			// if we don't have a custom thumbnail.
 			if ( empty( $thumbnail_url ) ) {
@@ -186,7 +199,7 @@ function hd_bcve_render_core_embed_block( $block_content, $block, $instance ) {
 		// for vimeo urls.
 		case 'vimeo.com':
 		case 'www.vimeo.com':
-		
+
 			// if we have a path.
 			if ( empty( $parsed_video_url['path'] ) ) {
 				return $block_content;
@@ -205,7 +218,7 @@ function hd_bcve_render_core_embed_block( $block_content, $block, $instance ) {
 
 			// break out the switch.
 			break;
-		
+
 		// for vimeo urls.
 		case 'www.dailymotion.com':
 		case 'dailymotion.com':
@@ -223,9 +236,9 @@ function hd_bcve_render_core_embed_block( $block_content, $block, $instance ) {
 
 				// get the vimeo thumbnail url for this video.
 				$thumbnail_url = hd_bcve_get_dailymotion_video_thumbnail_url( $video_id );
-			
+
 			}
-			
+
 			// break out the switch.
 			break;
 
@@ -405,7 +418,7 @@ function hd_bcve_get_vimeo_video_thumbnail_url( $video_id = '' ) {
 		set_transient( 'hd_bcve_' . $video_id, $image_url, DAY_IN_SECONDS );
 
 	}
-	
+
 	// return the url.
 	return apply_filters( 'hd_bcve_vimeo_video_thumbnail_url', $image_url, $video_id );
 
@@ -454,7 +467,7 @@ function hd_bcve_get_dailymotion_video_thumbnail_url( $video_id = '' ) {
 		set_transient( 'hd_bcve_' . $video_id, $image_url, DAY_IN_SECONDS );
 
 	}
-	
+
 	// return the url.
 	return apply_filters( 'hd_bcve_dailymotion_video_thumbnail_url', $image_url, $video_id );
 

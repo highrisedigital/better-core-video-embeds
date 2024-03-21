@@ -4,7 +4,7 @@ Donate link: https://example.com/
 Tags: embed, oembed, youtube, vimeo, performance, blocks
 Requires at least: 6.0
 Tested up to: 6.4.2
-Stable tag: 1.3.2
+Stable tag: 1.3.3
 Requires PHP: 8.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -49,10 +49,13 @@ Yes! As of version 1.3, you can set a custom thumbnail on the embed block and th
 
 == Changelog ==
 
-= 1.3.2 (19/05/2024) =
+= 1.3.3 (21/03/2024) =
+* Ensure (previously) live video URLs from Youtube embed correctly. Thanks for @bacoords for the development on this.
+
+= 1.3.2 (19/03/2024) =
 * Use regex instead of the domDocument for grabbing a video caption.
 
-= 1.3.1 (18/05/2024) =
+= 1.3.1 (18/03/2024) =
 * Added a fix which ensures special characters in video captions are outputted correctly.
 
 = 1.3 (14/12/2023) =
