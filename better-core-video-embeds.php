@@ -576,9 +576,34 @@ add_action( 'hd_bcve_video_thumbnail_markup', 'hd_bcve_add_video_play_button', 2
  */
 function hd_bcve_add_video_thumbnail_markup( $block, $video_id, $thumbnail_url, $wrapper_classes ) {
 
-	?>
-	<img loading="lazy" class="hd-bcve-thumbnail" alt="" src="<?php echo esc_url( $thumbnail_url ); ?>" />
-	<?php
+	$imageid = attachment_url_to_postid( $thumbnail_url );
+	if ( ! empty( $imageid ) ) {
+		echo wp_get_attachment_image(
+			$imageid,
+			'full',
+			false,
+			[
+				'class'   => 'hd-bcve-thumbnail',
+				'loading' => 'lazy',
+			]
+		);
+	} else {
+		?>
+		<img
+		loading="lazy"
+		class="hd-bcve-thumbnail"
+		alt=""
+		src="<?php echo esc_url( $thumbnail_url ); ?>"
+		<?php
+			$sizes = getimagesize( $thumbnail_url );
+			if ( ! empty( $sizes ) && array_key_exists( 3, $sizes ) ) {
+				echo 'width="' . esc_attr( $sizes[0] ) . '"';
+				echo 'height="' . esc_attr( $sizes[1] ) . '"';
+			}
+		?>
+		/>
+		<?php
+	}
 
 }
 
