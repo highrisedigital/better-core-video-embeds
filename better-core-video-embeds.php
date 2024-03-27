@@ -559,7 +559,7 @@ add_action( 'hd_bcve_video_thumbnail_markup', 'hd_bvce_open_markup_figure_elemen
 function hd_bcve_add_video_play_button( $block, $video_id, $thumbnail_url, $wrapper_classes ) {
 
 	?>
-	<button class="play-button" aria-label="<?php esc_attr_e( 'Play video' ); ?>"></button>
+	<button class="play-button" aria-label="<?php echo esc_attr_x( 'Play video', 'Video play button', 'better-core-video-embeds' ); ?>"></button>
 	<?php
 
 }
