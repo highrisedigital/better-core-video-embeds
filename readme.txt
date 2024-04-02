@@ -4,7 +4,7 @@ Donate link: https://example.com/
 Tags: embed, oembed, youtube, vimeo, performance, blocks
 Requires at least: 6.0
 Tested up to: 6.4.2
-Stable tag: 1.3.3
+Stable tag: 1.3.4
 Requires PHP: 8.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -48,6 +48,12 @@ Yes! As of version 1.3, you can set a custom thumbnail on the embed block and th
 1. Example of an embedded Youtube video in a post when using Better Core Embeds
 
 == Changelog ==
+
+= 1.3.4 (02/04/2024) =
+* Translation of the "Play video" button text.
+* A responsive video poster image if a custom (locally-hosted) image is chosen.
+* Width and height parameters to remotely-hosted images.
+* Thanks to Matt Radford for these updates.
 
 = 1.3.3 (21/03/2024) =
 * Ensure (previously) live video URLs from Youtube embed correctly. Thanks for @bacoords for the development on this.
