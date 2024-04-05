@@ -199,14 +199,15 @@ function hd_bcve_render_core_embed_block( $block_content, $block, $instance ) {
 		// for vimeo urls.
 		case 'vimeo.com':
 		case 'www.vimeo.com':
+		case 'player.vimeo.com':
 
 			// if we have a path.
 			if ( empty( $parsed_video_url['path'] ) ) {
 				return $block_content;
 			}
 
-			// remove the preceeding slash.
-			$video_id = str_replace( '/', '', $parsed_video_url['path'] );
+			// remove the preceeding slash. (and possible inclusion of video in player.* urls)
+			$video_id = str_replace( ['/video', '/'], ['', ''], $parsed_video_url['path'] );
 
 			// if we don't have a custom thumbnail.
 			if ( empty( $thumbnail_url ) ) {
@@ -577,7 +578,9 @@ add_action( 'hd_bcve_video_thumbnail_markup', 'hd_bcve_add_video_play_button', 2
 function hd_bcve_add_video_thumbnail_markup( $block, $video_id, $thumbnail_url, $wrapper_classes ) {
 
 	$imageid = attachment_url_to_postid( $thumbnail_url );
+	
 	if ( ! empty( $imageid ) ) {
+
 		echo wp_get_attachment_image(
 			$imageid,
 			'full',
@@ -588,6 +591,8 @@ function hd_bcve_add_video_thumbnail_markup( $block, $video_id, $thumbnail_url, 
 			]
 		);
 	} else {
+		$sizes = getimagesize( $thumbnail_url );
+
 		?>
 		<img
 		loading="lazy"
