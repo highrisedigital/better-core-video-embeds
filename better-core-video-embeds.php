@@ -576,8 +576,13 @@ add_action( 'hd_bcve_video_thumbnail_markup', 'hd_bcve_add_video_play_button', 2
  */
 function hd_bcve_add_video_thumbnail_markup( $block, $video_id, $thumbnail_url, $wrapper_classes ) {
 
+	// get the image ID from the URL.
 	$imageid = attachment_url_to_postid( $thumbnail_url );
+
+	// if we have an image ID, therefore the image is a local image.
 	if ( ! empty( $imageid ) ) {
+
+		// output the image.
 		echo wp_get_attachment_image(
 			$imageid,
 			'full',
@@ -587,21 +592,10 @@ function hd_bcve_add_video_thumbnail_markup( $block, $video_id, $thumbnail_url, 
 				'loading' => 'lazy',
 			]
 		);
+
 	} else {
 		?>
-		<img
-		loading="lazy"
-		class="hd-bcve-thumbnail"
-		alt=""
-		src="<?php echo esc_url( $thumbnail_url ); ?>"
-		<?php
-			$sizes = getimagesize( $thumbnail_url );
-			if ( ! empty( $sizes ) && array_key_exists( 3, $sizes ) ) {
-				echo 'width="' . esc_attr( $sizes[0] ) . '"';
-				echo 'height="' . esc_attr( $sizes[1] ) . '"';
-			}
-		?>
-		/>
+		<img loading="lazy" class="hd-bcve-thumbnail" alt="" src="<?php echo esc_url( $thumbnail_url ); ?>" />
 		<?php
 	}
 
