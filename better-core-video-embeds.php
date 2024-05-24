@@ -620,7 +620,9 @@ function hd_bcve_add_video_caption_markup( $block, $video_id, $thumbnail_url, $w
 	}
 
 	?>
-	<?php echo wp_kses( $video_caption, hd_bcve_allowed_innerblock_html() ); ?>
+	<figcaption class="wp-element-caption">
+		<?php echo wp_kses( $video_caption, hd_bcve_allowed_innerblock_html() ); ?>
+	</figcaption>
 	<?php
 
 }
