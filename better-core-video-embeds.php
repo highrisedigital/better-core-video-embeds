@@ -4,7 +4,7 @@ Plugin Name: Better Core Video Embeds
 Description: A plugin which enhances the core video embeds for Youtube and Vimeo videos by not loading unnecessary scripts until they are needed.
 Requires at least: 6.0
 Requires PHP: 7.0
-Version: 1.3.4
+Version: 1.3.5
 Author: Highrise Digital
 Author URI: https://highrise.digital/
 License: GPL-2.0-or-later
@@ -15,7 +15,7 @@ Text Domain: better-core-video-embeds
 // define variable for path to this plugin file.
 define( 'HD_BCVE_LOCATION', dirname( __FILE__ ) );
 define( 'HD_BCVE_LOCATION_URL', plugins_url( '', __FILE__ ) );
-define( 'HD_BCVE_VERSION', '1.3.4' );
+define( 'HD_BCVE_VERSION', '1.3.5' );
 
 /**
  * Function to run on plugins load.
@@ -576,8 +576,13 @@ add_action( 'hd_bcve_video_thumbnail_markup', 'hd_bcve_add_video_play_button', 2
  */
 function hd_bcve_add_video_thumbnail_markup( $block, $video_id, $thumbnail_url, $wrapper_classes ) {
 
+	// get the image ID from the URL.
 	$imageid = attachment_url_to_postid( $thumbnail_url );
+
+	// if we have an image ID, therefore the image is a local image.
 	if ( ! empty( $imageid ) ) {
+
+		// output the image.
 		echo wp_get_attachment_image(
 			$imageid,
 			'full',
@@ -587,21 +592,10 @@ function hd_bcve_add_video_thumbnail_markup( $block, $video_id, $thumbnail_url, 
 				'loading' => 'lazy',
 			]
 		);
+
 	} else {
 		?>
-		<img
-		loading="lazy"
-		class="hd-bcve-thumbnail"
-		alt=""
-		src="<?php echo esc_url( $thumbnail_url ); ?>"
-		<?php
-			$sizes = getimagesize( $thumbnail_url );
-			if ( ! empty( $sizes ) && array_key_exists( 3, $sizes ) ) {
-				echo 'width="' . esc_attr( $sizes[0] ) . '"';
-				echo 'height="' . esc_attr( $sizes[1] ) . '"';
-			}
-		?>
-		/>
+		<img loading="lazy" class="hd-bcve-thumbnail" alt="" src="<?php echo esc_url( $thumbnail_url ); ?>" />
 		<?php
 	}
 
@@ -626,7 +620,9 @@ function hd_bcve_add_video_caption_markup( $block, $video_id, $thumbnail_url, $w
 	}
 
 	?>
-	<?php echo wp_kses( $video_caption, hd_bcve_allowed_innerblock_html() ); ?>
+	<figcaption class="wp-element-caption">
+		<?php echo wp_kses( $video_caption, hd_bcve_allowed_innerblock_html() ); ?>
+	</figcaption>
 	<?php
 
 }
