@@ -3,7 +3,7 @@ Contributors: highrisedigital,wpmarkuk
 Donate link: https://example.com/
 Tags: embed, oembed, youtube, vimeo, performance, blocks
 Requires at least: 6.0
-Tested up to: 6.4.2
+Tested up to: 6.5.3
 Stable tag: 1.3.5
 Requires PHP: 8.0
 License: GPLv2 or later
