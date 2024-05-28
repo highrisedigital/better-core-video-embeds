@@ -49,14 +49,14 @@ Yes! As of version 1.3, you can set a custom thumbnail on the embed block and th
 
 == Changelog ==
 
+= 1.3.5 (28/05/2024) =
+* Ensure the caption markup matches that of the original embed when the page loads.
+
 = 1.3.4 (02/04/2024) =
 * Translation of the "Play video" button text.
 * A responsive video poster image if a custom (locally-hosted) image is chosen.
 * Width and height parameters to remotely-hosted images.
 * Thanks to Matt Radford for these updates.
-
-= 1.3.5 (28/05/2024) =
-* Ensure the caption markup matches that of the original embed when the page loads.
 
 = 1.3.3 (21/03/2024) =
 * Ensure (previously) live video URLs from Youtube embed correctly. Thanks for @bacoords for the development on this.
