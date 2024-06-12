@@ -15,8 +15,9 @@
     align-items: center;
     justify-content: center;
     position: absolute;
-    top: calc( ( (var(--aspect-ratio-height) / var(--aspect-ratio-width)) * 50cqw ) - ( 0.5 * var(--hd-play-button-size) ) );
-    left: calc(50% - 0.5 * var(--hd-play-button-size));
+    top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
     z-index: 2;
     width: var(--hd-play-button-size);
     height: var(--hd-play-button-size);
@@ -41,16 +42,6 @@
 }
 .hd-bcve-wrapper:hover .play-button:after {
 	--hd-play-button-opacity: .8;
-}
-.hd-bcve-wrapper.wp-embed-aspect-4-3 {
-	--aspect-ratio-width: 4;      
-    --aspect-ratio-height: 3;
-
-}
-.hd-bcve-wrapper.wp-embed-aspect-16-9 {
-	--aspect-ratio-width: 16;      
-    --aspect-ratio-height: 9;
-
 }
 .hd-bcve-wrapper.wp-embed-aspect-4-3 .hd-bcve-thumbnail {
 	aspect-ratio: 1.33;
