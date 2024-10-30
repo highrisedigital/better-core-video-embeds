@@ -33,24 +33,45 @@ add_action( 'plugins_loaded', 'hd_bcve_plugins_loaded' );
 /**
  * Enqueues the frontend JS for the plugin.
  */
-function hd_bcve_enqueue_scripts() {
+function hd_bcve_register_enqueue_scripts() {
 
-	// only if the page has a core embed block present.
-	if ( has_block( 'core/embed' ) ) {
+	// register the script for the front end.
+	wp_register_script(
+		'better-core-video-embeds-js',
+		HD_BCVE_LOCATION_URL . '/assets/js/better-core-video-embeds.min.js',
+		false,
+		HD_BCVE_VERSION,
+		true
+	);
 
-		// enqueue the front end script to invoking the video embed on image click.
-		wp_enqueue_script(
-			'better-core-video-embeds-js',
-			HD_BCVE_LOCATION_URL . '/assets/js/better-core-video-embeds.min.js',
-			false,
-			HD_BCVE_VERSION,
-			true
+}
+
+add_action( 'init', 'hd_bcve_register_enqueue_scripts' );
+
+/**
+ * Add the front end JS to the core/embed block metadata.
+ *
+ * @param array $metadata The block metadata.
+ * @return array $metadata The block metadata.
+ */
+function hd_bcve_filter_embed_metadata( $metadata ) {
+
+	// if this is the core/embed block.
+	if ( 'core/embed' === $metadata['name'] ) {
+
+		$metadata['viewScript'] = array_merge(
+			(array) ( $metadata['viewScript'] ?? array() ),
+			['better-core-video-embeds-js']
 		);
 
 	}
+
+	// return the metadata.
+	return $metadata;
+
 }
 
-add_action( 'wp_enqueue_scripts', 'hd_bcve_enqueue_scripts' );
+add_filter( 'block_type_metadata', 'hd_bcve_filter_embed_metadata' );
 
 /**
  * Enqueues the block editor JS for the plugin.
@@ -78,22 +99,25 @@ add_action( 'enqueue_block_editor_assets', 'hd_bcve_enqueue_block_editor_assets'
  */
 function hd_bcve_register_block_style() {
 
-	// only if the page has a core embed block present.
-	if ( has_block( 'core/embed' ) ) {
+	// register the block styles.
+	wp_register_style(
+		'better-core-video-embeds-styles',
+		HD_BCVE_LOCATION_URL . '/assets/css/better-core-video-embeds.min.css',
+		[],
+		HD_BCVE_VERSION
+	);
 
-		// register the style for this block.
-		wp_enqueue_style(
-			'better-core-video-embeds-styles',
-			HD_BCVE_LOCATION_URL . '/assets/css/better-core-video-embeds.min.css',
-			[],
-			HD_BCVE_VERSION
-		);
-
-	}
+	// enqueue the registered block style.
+	wp_enqueue_block_style(
+		'core/embed',
+		[
+			'handle' => 'better-core-video-embeds-styles',
+		]
+	);
 
 }
 
-add_action( 'wp_enqueue_scripts', 'hd_bcve_register_block_style' );
+add_action( 'init', 'hd_bcve_register_block_style' );
 
 /**
  * Filters the code embed block output for improved performance on Youtube videos.
