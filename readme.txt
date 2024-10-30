@@ -4,7 +4,7 @@ Donate link: https://example.com/
 Tags: embed, oembed, youtube, vimeo, performance, blocks
 Requires at least: 6.0
 Tested up to: 6.5.4
-Stable tag: 1.3.6
+Stable tag: 1.3.7
 Requires PHP: 8.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -48,6 +48,10 @@ Yes! As of version 1.3, you can set a custom thumbnail on the embed block and th
 1. Example of an embedded Youtube video in a post when using Better Core Embeds
 
 == Changelog ==
+
+= 1.3.7 (30/10/2024) =
+* Ensures that better core embeds work even when they are included in a synced pattern.
+* Improves the enqueuing of the JS and CSS to be more robust.
 
 = 1.3.6 (12/06/2024) =
 * Improve the play button CSS to ensure it works with videos at aspect rations other than 16:9 and 4:3.
