@@ -332,9 +332,6 @@ function hd_bcve_render_core_embed_block( $block_content, $block, $instance ) {
 	// buffer the output as we need to return not echo.
 	ob_start();
 
-	// output the registered "block" styles for the thubmnail.
-	wp_print_styles( 'better-core-video-embeds-styles' );
-
 	/**
 	 * Fires and action to which the new block markup is added too.
 	 *
